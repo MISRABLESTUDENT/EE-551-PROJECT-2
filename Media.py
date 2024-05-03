@@ -1,3 +1,6 @@
+# Author: Tianyu Sheng
+# Date: 5/3/2024
+# Description: Media class.
 class Media:
     def __init__(self, id1, title, average_rating):
         self._id = id1
