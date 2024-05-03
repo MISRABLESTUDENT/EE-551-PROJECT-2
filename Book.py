@@ -1,3 +1,6 @@
+# Author: Tianyu Sheng
+# Date: 5/3/2024
+# Description: Book class.
 from Media import Media
 
 
