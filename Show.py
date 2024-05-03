@@ -1,3 +1,6 @@
+# Author: Tianyu Sheng
+# Date: 5/3/2024
+# Description: Show class.
 from Media import Media
 
 
