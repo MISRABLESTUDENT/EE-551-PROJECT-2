@@ -39,10 +39,10 @@ class RecommenderGUI:
         
     ## movies tab##
               
-        movies_frame = ttk.Frame(notebook)
-        notebook.add(movies_frame,text = 'Movies')
+        self.movies_frame = ttk.Frame(notebook)
+        notebook.add(self.movies_frame,text = 'Movies')
         
-        label_movies = ttk.Label(movies_frame)
+        label_movies = ttk.Label(self.movies_frame)
         label_movies.pack(pady=20, padx=20)
 
         label_movies.smootInfo = ('No data has been loaded yet')
@@ -51,7 +51,7 @@ class RecommenderGUI:
         label_movies.smootTextArea.config(state=tk.DISABLED)
         label_movies.smootTextArea.pack(side=tk.TOP)
         
-        movie_listbox = tk.Listbox(movies_frame, width=50, height=10)
+        movie_listbox = tk.Listbox(self.movies_frame, width=50, height=10)
         movie_listbox.pack(padx=20, pady=20)
         movies = [("The Shawshank Redemption", 142),("The Godfather", 175),("The Dark Knight", 152),("Pulp Fiction", 154)]
         for movie, runtime in movies:      #fill listbox
@@ -59,10 +59,10 @@ class RecommenderGUI:
 
     ## tvshows tab##
         
-        tvshows_frame = ttk.Frame(notebook)
-        notebook.add(tvshows_frame,text ='TV Shows')
+        self.tvshows_frame = ttk.Frame(notebook)
+        notebook.add(self.tvshows_frame,text ='TV Shows')
         
-        label_tvshows = ttk.Label(tvshows_frame)
+        label_tvshows = ttk.Label(self.tvshows_frame)
         label_tvshows.pack(pady=20, padx=20)
 
         label_tvshows.smootInfo = ('No data has been loaded yet')
@@ -71,16 +71,16 @@ class RecommenderGUI:
         label_tvshows.smootTextArea.config(state=tk.DISABLED)
         label_tvshows.smootTextArea.pack(side=tk.TOP)
         
-        tvshows_listbox = tk.Listbox(tvshows_frame, width=50, height=10)
+        tvshows_listbox = tk.Listbox(self.tvshows_frame, width=50, height=10)
         tvshows_listbox.pack(padx=20, pady=20)
         
         
     ## books tab##
         
-        books_frame = ttk.Frame(notebook)
-        notebook.add(books_frame,text ='Books')
+        self.books_frame = ttk.Frame(notebook)
+        notebook.add(self.books_frame,text ='Books')
         
-        label_books = ttk.Label(books_frame)
+        label_books = ttk.Label(self.books_frame)
         label_books.pack(pady=20, padx=20)
 
         label_books.smootInfo = ('No data has been loaded yet')
@@ -89,42 +89,29 @@ class RecommenderGUI:
         label_books.smootTextArea.config(state=tk.DISABLED)
         label_books.smootTextArea.pack(side=tk.TOP)
         
-        books_listbox = tk.Listbox(books_frame, width=50, height=10)
+        books_listbox = tk.Listbox(self.books_frame, width=50, height=10)
         books_listbox.pack(padx=20, pady=20)
         
     ## search movies/tv tab ##
     
-        searchmt_frame = ttk.Frame(notebook)
-        notebook.add(searchmt_frame,text ='Search Movies/TV')
+        self.searchmt_frame = ttk.Frame(notebook)
+        notebook.add(self.searchmt_frame,text ='Search Movies/TV')
         
-        label_searchmt = ttk.Label(searchmt_frame)
-        label_searchmt.pack(pady=20, padx=20)
+        label_searchmt = ttk.Label(self.searchmt_frame)
+        self.searchmt()   #########################
 
-        label_searchmt.smootInfo = ('No data has been loaded yet')
-        label_searchmt.smootTextArea = tk.Text(label_searchmt, wrap=tk.WORD)
-        label_searchmt.smootTextArea.insert(tk.END, label_searchmt.smootInfo)
-        label_searchmt.smootTextArea.config(state=tk.DISABLED)
-        label_searchmt.smootTextArea.pack(side=tk.TOP)
         
-        books_listbox = tk.Listbox(searchmt_frame, width=50, height=10)
-        books_listbox.pack(padx=20, pady=20)
+
         
         
     ## search books tab ##
-        searchb_frame = ttk.Frame(notebook)
-        notebook.add(searchb_frame,text ='Search Movies/TV')
+        self.searchb_frame = ttk.Frame(notebook)
+        notebook.add(self.searchb_frame,text ='Search Books')
         
-        label_searchb = ttk.Label(searchb_frame)
-        label_searchb.pack(pady=20, padx=20)
+        label_searchb = ttk.Label(self.searchb_frame)
+        self.searchb()
 
-        label_searchb.smootInfo = ('No data has been loaded yet')
-        label_searchb.smootTextArea = tk.Text(label_searchb, wrap=tk.WORD)
-        label_searchb.smootTextArea.insert(tk.END, label_searchb.smootInfo)
-        label_searchb.smootTextArea.config(state=tk.DISABLED)
-        label_searchb.smootTextArea.pack(side=tk.TOP)
-        
-        books_listbox = tk.Listbox(searchb_frame, width=50, height=10)
-        books_listbox.pack(padx=20, pady=20)
+ 
         
         
     ## recommendations tab ##
@@ -165,7 +152,58 @@ class RecommenderGUI:
             
     def getRecommendations(self):
             messagebox.showerror(' ', 'getrecommendations! function not implemented yet') 
+   
 
+    ###search tv/movies
+    def searchmt(self):
+        
+        #TV or Movies combobox
+        self.type = ttk.Label(self.searchmt_frame,text='Type')
+        self.type.grid(row=0, column=0, padx=0, pady=10, sticky='w')
+        self.type_combobox = ttk.Combobox(self.searchmt_frame,values=['Movies','TV Show'])
+        self.type_combobox.grid(row=0, column=0, padx=50, pady=10, sticky='w')
+        # text entry#
+        self.title = self.create_entry('Title:',1,self.searchmt_frame)
+        self.director = self.create_entry("Director:", 2,self.searchmt_frame)
+        self.actor = self.create_entry("Actor:", 3,self.searchmt_frame)
+        self.genre = self.create_entry("Genre:", 4,self.searchmt_frame)
+        
+        #research button
+        self.search_button = ttk.Button(self.searchmt_frame, text="Search", command=self.perform_search)
+        self.search_button.grid(row=5, column=0, columnspan=2, pady=10, sticky='w')
+        
+        #result shown#
+        self.result_text = tk.Text(self.searchmt_frame, state='disabled')
+        self.result_text.grid(row=6, column=0, columnspan=2, padx=0, pady=10, sticky='nsew')
+   
+
+    ###search books
+    def searchb(self):
+        # text entry#
+        self.Title = self.create_entry('Title:',1,self.searchb_frame)
+        self.Author = self.create_entry("Author:", 2,self.searchb_frame)
+        self.Publisher = self.create_entry("Publisher", 3,self.searchb_frame)
+
+        
+        #research button
+        self.search_button = ttk.Button(self.searchb_frame, text="Search", command=self.perform_search)
+        self.search_button.grid(row=5, column=0, columnspan=2, pady=10, sticky='w')
+        
+        #result shown#
+        self.result_text = tk.Text(self.searchb_frame, state='disabled')
+        self.result_text.grid(row=6, column=0, columnspan=2, padx=0, pady=10, sticky='nsew')
+    
+    
+    
+    def create_entry(self,label_text,row,frame):
+        label = ttk.Label(frame,text=label_text)
+        label.grid(row=row, column=0, padx=0, pady=5, sticky='w')
+        entry = ttk.Entry(frame)
+        entry.grid(row=row, column=0, padx=len(label_text*7), pady=5, sticky='w')
+        return entry
+    
+    def perform_search(self):
+        messagebox.showinfo('Warning','function unfinished')
 
 def main():
     app = RecommenderGUI()
