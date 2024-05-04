@@ -5,7 +5,7 @@ from Media import Media
 
 
 class Show(Media):
-    def __init__(self, id1, title, average_rating, show, directors, actors, country, date, year,
+    def __init__(self, id1, show, title, directors, actors, average_rating, country, date, year,
                  rating, duration, genres, description):
         Media.__init__(self, id1, title, average_rating)
         self.__show = show
@@ -45,36 +45,3 @@ class Show(Media):
 
     def get_date(self):
         return self.__date
-
-    def set_date(self, date):
-        self.__date = date
-
-    def get_year(self):
-        return self.__year
-
-    def set_year(self, year):
-        self.__year = year
-
-    def get_rating(self):
-        return self.__rating
-
-    def set_rating(self, rating):
-        self.__rating = rating
-
-    def get_duration(self):
-        return self.__duration
-
-    def set_duration(self, duration):
-        self.__duration = duration
-
-    def get_genres(self):
-        return self.__genres
-
-    def set_genres(self, genres):
-        self.__genres = genres
-
-    def get_description(self):
-        return self.__description
-
-    def set_description(self, description):
-        self.__description = description
