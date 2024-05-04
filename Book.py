@@ -5,7 +5,7 @@ from Media import Media
 
 
 class Book(Media):
-    def __init__(self, id1, title, average_rating, authors, isbn, isbn13, language, pages,
+    def __init__(self, id1, title, authors, average_rating, isbn, isbn13, language, pages,
                  ratings, publication_date, publisher):
         Media.__init__(self, id1, title, average_rating)
         self.__authors = authors
