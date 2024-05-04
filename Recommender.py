@@ -28,8 +28,7 @@ class Recommender:
     
     def loadShows(self):
         while True:
-            filepath = filedialog.askopenfilename(title="Please select a show file.", initialdir=os.getcwd(),
-                                                  filetypes=[("CSV Files", "*.csv"), ("All Files", "*.*")])
+            filepath = filedialog.askopenfilename(title="Please select a show file.", initialdir=os.getcwd())
             if os.path.exists(filepath):
                 break
         show_file = open(filepath, "r")
