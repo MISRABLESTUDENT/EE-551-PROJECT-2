@@ -42,26 +42,26 @@ class Recommender:
             self.shows[line_list[0]] = show_project
         show_file.close()
 
-    def loadAssociations(self):
+        def loadAssociations(self):
         while True:
             filepath = filedialog.askopenfilename(title="Please select an associations file.", initialdir=os.getcwd())
             if os.path.exists(filepath):
                 break
-
         association_file = open(filepath, "r")
         for line in association_file:
             line = line.strip()
             line_list = line.split(",")
             id1, id2 = line_list[0], line_list[1]
             if id1 not in self.associations:
-                self.associations[id1] = {}
-            if id2 not in self.associations[id1]:
-                self.associations[id1][id2] = 0
-            self.associations[id1][id2] += 1
-            # Ensure bidirectional association
+                self.associations[id1] = {id2: 1}
+            elif id2 in self.associations[id1]:
+                self.associations[id1][id2] += 1
+            else:
+                self.associations[id1][id2] = 1
             if id2 not in self.associations:
-                self.associations[id2] = {}
-            if id1 not in self.associations[id2]:
-                self.associations[id2][id1] = 0
-            self.associations[id2][id1] += 1
+                self.associations[id2] = {id1: 1}
+            elif id1 in self.associations[id2]:
+                self.associations[id2][id1] += 1
+            else:
+                self.associations[id2][id1] = 1
         association_file.close()
