@@ -37,7 +37,8 @@ class Recommender:
             line_list = line.split(",")
             show_project = Show(line_list[0], line_list[1], line_list[2], line_list[3],
                                 line_list[4], line_list[5], line_list[6], line_list[7],
-                                line_list[8], line_list[9], line_list[10], line_list[11])
+                                line_list[8], line_list[9], line_list[10], line_list[11],
+                               line_list[12], line_list[13])
             self.shows[line_list[0]] = show_project
         show_file.close()
 
