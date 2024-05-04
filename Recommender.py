@@ -1,20 +1,10 @@
+from Book import Book
+from Show import Show
+
+
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import csv
-
-
-class Book:
-    def __init__(self, book_id, title, authors):
-        self.book_id = book_id
-        self.title = title
-        self.authors = authors
-
-
-class Show:
-    def __init__(self, show_id, title, runtime):
-        self.show_id = show_id
-        self.title = title
-        self.runtime = runtime
 
 
 class Recommender:
