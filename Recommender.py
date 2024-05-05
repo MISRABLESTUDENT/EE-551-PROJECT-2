@@ -101,7 +101,7 @@ class Recommender:
         # Format each TV show entry
         for tv in tv_shows:
             seasons = tv.get_duration().split()[0]  # Assuming the duration is like "2 Seasons"
-            tv_list.append(f"{tv.get_title.ljust(max_title_length)} {seasons.ljust(max_seasons_length)}")
+            tv_list.append(f"{tv.get_title().ljust(max_title_length)} {seasons.ljust(max_seasons_length)}")
 
         return "\n".join(tv_list)
 
