@@ -46,11 +46,11 @@ class RecommenderGUI:
         self.movies_frame = ttk.Frame(notebook)
         notebook.add(self.movies_frame,text = 'Movies')
         
-        label_movies = ttk.Label(self.movies_frame)
-        label_movies.pack(pady=20, padx=20)
+        self.label_movies = ttk.Label(self.movies_frame)
+        self.label_movies.pack(pady=20, padx=20)
 
-        label_movies.smootTextArea = tk.Text(self.movies_frame, wrap=tk.WORD)
-        label_movies.smootTextArea.pack(side=tk.TOP)
+        self.label_movies.smootTextArea = tk.Text(self.movies_frame, wrap=tk.WORD)
+        self.label_movies.smootTextArea.pack(side=tk.TOP)
         #label_movies.smootInfo = ('need getmovielist and getmoviestats')
         #label_movies.smootTextArea = tk.Text(label_movies, wrap=tk.WORD)
         #label_movies.smootTextArea.insert(tk.END, label_movies.smootInfo)
@@ -66,14 +66,14 @@ class RecommenderGUI:
         self.tvshows_frame = ttk.Frame(notebook)
         notebook.add(self.tvshows_frame,text ='TV Shows')
         
-        label_tvshows = ttk.Label(self.tvshows_frame)
-        label_tvshows.pack(pady=20, padx=20)
+        self.label_tvshows = ttk.Label(self.tvshows_frame)
+        self.label_tvshows.pack(pady=20, padx=20)
 
-        label_tvshows.smootInfo = ('need gettvlist and gettvstats')
-        label_tvshows.smootTextArea = tk.Text(label_tvshows, wrap=tk.WORD)
-        label_tvshows.smootTextArea.insert(tk.END, label_tvshows.smootInfo)
-        label_tvshows.smootTextArea.config(state=tk.DISABLED)
-        label_tvshows.smootTextArea.pack(side=tk.TOP)
+        self.label_tvshows.smootInfo = ('need gettvlist and gettvstats')
+        self.label_tvshows.smootTextArea = tk.Text(self.label_tvshows, wrap=tk.WORD)
+        self.label_tvshows.smootTextArea.insert(tk.END, self.label_tvshows.smootInfo)
+        self.label_tvshows.smootTextArea.config(state=tk.DISABLED)
+        self.label_tvshows.smootTextArea.pack(side=tk.TOP)
         
         tvshows_listbox = tk.Listbox(self.tvshows_frame, width=50, height=10)
         tvshows_listbox.pack(padx=20, pady=20)
@@ -84,8 +84,8 @@ class RecommenderGUI:
         self.books_frame = ttk.Frame(notebook)
         notebook.add(self.books_frame,text ='Books')
         
-        label_books = ttk.Label(self.books_frame)
-        label_books.pack(pady=20, padx=20)
+        self.label_books = ttk.Label(self.books_frame)
+        self.label_books.pack(pady=20, padx=20)
 
         #label_books.smootInfo = ('need getbooklist and getbookstats')
         #label_books.smootTextArea = tk.Text(label_books, wrap=tk.WORD)
@@ -141,17 +141,17 @@ class RecommenderGUI:
     def update_movie_list(self):
         movie_list = self.recommender.getMovieList()  # 获取电影列表字符串
         print("Movie list:", movie_list)  # 查看返回的电影列表内容
-        label_movies.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
-        label_movies.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
-        label_movies.smootTextArea.insert(tk.END, movie_list)  # 插入新的电影列表
-        label_movies.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
+        self.label_movies.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
+        self.label_movies.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
+        self.label_movies.smootTextArea.insert(tk.END, movie_list)  # 插入新的电影列表
+        self.label_movies.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
     def update_tv_list(self):
         tv_list = self.recommender.getTVList()  # 获取电影列表字符串
         print("TV shows list:", tv_list)  # 查看返回的电影列表内容
-        label_tvshows.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
-        label_tvshows.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
-        label_tvshows.smootTextArea.insert(tk.END, tv_list)  # 插入新的电影列表
-        label_tvshows.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
+        self.label_tvshows.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
+        self.label_tvshows.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
+        self.label_tvshows.smootTextArea.insert(tk.END, tv_list)  # 插入新的电影列表
+        self.label_tvshows.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
         
     def update_books_list(self):
         book_list = self.recommender.getBookList()  # 获取电影列表字符串
@@ -186,12 +186,13 @@ class RecommenderGUI:
 
     ###search tv/movies
     def searchmt(self):
-        
         #TV or Movies combobox
         self.type = ttk.Label(self.searchmt_frame,text='Type')
         self.type.grid(row=0, column=0, padx=0, pady=10, sticky='w')
         self.type_combobox = ttk.Combobox(self.searchmt_frame,values=['Movie','TV Show'])
         self.type_combobox.grid(row=0, column=0, padx=50, pady=10, sticky='w')
+        self.type_combobox.set('Movie')
+        print("设置默认 show_type：", self.type_combobox.get())  # 验证设置是否成功
         # text entry#
         self.title = self.create_entry('Title:',1,self.searchmt_frame)
         self.director = self.create_entry("Director:", 2,self.searchmt_frame)
@@ -240,14 +241,16 @@ class RecommenderGUI:
         self.recommender.searchBooks(title, authors, publisher)
     def perform_search_mt(self):
         # 获取组合框中的值
+        self.main_window.update()  # 更新 GUI 状态
         show_type = self.type_combobox.get()
+        print("检索到的 show_type：", show_type)  # 打印检索到的 show_type 值
         title = self.title.get()
         director = self.director.get()
         actor = self.actor.get()
         genre = self.genre.get()
 
         print('good luck', show_type, title, director, actor, genre)
-        # 执行搜索（这里假设已经有了相应的recommender对象和方法）
+
         self.recommender.searchTVMovies(show_type, title, director, actor, genre)
         
     #get recommendations##
