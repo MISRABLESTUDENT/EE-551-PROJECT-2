@@ -243,16 +243,17 @@ class Recommender:
                 messagebox.showwarning(title="Warning", message="There are no recommendations for this title.")
                 return "No Results"
             recommend = ""
-            for id2 in self.associations[show_id]:
-                if id2 in self.books:
-                    book = self.books[id2]
-                    id_str = (f"Title:\n{book.get_title()}\nAuthor:\n{book.get_authors()}\nAverage Rating:\n"
-                              f"{book.get_average_rating()}\nISBN:\n{book.get_isbn()}\nISBN13:\n"
-                              f"{book.get_isbn13()}\nLanguage Code:\n{book.get_language()}\nPages:\n"
-                              f"{book.get_pages()}\nRating Count:\n{book.get_ratings()}\nPublication Date:\n"
-                              f"{book.get_publication_date()}\nPublisher:\n{book.get_publisher()}\n\n"
-                              f"**************************************************\n\n")
-                    recommend += id_str
+            if show_id in self.associations:
+                for id2 in self.associations[show_id]:
+                    if id2 in self.books:
+                        book = self.books[id2]
+                        id_str = (f"Title:\n{book.get_title()}\nAuthor:\n{book.get_authors()}\nAverage Rating:\n"
+                                  f"{book.get_average_rating()}\nISBN:\n{book.get_isbn()}\nISBN13:\n"
+                                  f"{book.get_isbn13()}\nLanguage Code:\n{book.get_language()}\nPages:\n"
+                                  f"{book.get_pages()}\nRating Count:\n{book.get_ratings()}\nPublication Date:\n"
+                                  f"{book.get_publication_date()}\nPublisher:\n{book.get_publisher()}\n\n"
+                                  f"**************************************************\n\n")
+                        recommend += id_str
             if recommend == "":
                 return "No Results"
             return recommend
@@ -266,17 +267,18 @@ class Recommender:
                 messagebox.showwarning(title="Warning", message="There are no recommendations for this title.")
                 return "No Results"
             recommend = ""
-            for id4 in self.associations[book_id]:
-                if id4 in self.shows:
-                    show = self.shows[id4]
-                    id_str = (f"Type:\n{show.get_show()}\nTitle:\n{show.get_title()}\nDirector:\n"
-                              f"{show.get_directors()}\nCast:\n{show.get_actors()}\nAverage Rating:\n"
-                              f"{show.get_average_rating()}\nCountry:\n{show.get_country()}\nDate Added:\n"
-                              f"{show.get_date()}\nRelease Year:\n{show.get_year()}\nRating:\n"
-                              f"{show.get_rating()}\nDuration:\n{show.get_duration()}\nListed In:\n"
-                              f"{show.get_genres()}\nDescription:\n{show.get_description()}\n\n"
-                              f"**************************************************\n\n")
-                    recommend += id_str
+            if book_id in self.associations:
+                for id4 in self.associations[book_id]:
+                    if id4 in self.shows:
+                        show = self.shows[id4]
+                        id_str = (f"Type:\n{show.get_show()}\nTitle:\n{show.get_title()}\nDirector:\n"
+                                  f"{show.get_directors()}\nCast:\n{show.get_actors()}\nAverage Rating:\n"
+                                  f"{show.get_average_rating()}\nCountry:\n{show.get_country()}\nDate Added:\n"
+                                  f"{show.get_date()}\nRelease Year:\n{show.get_year()}\nRating:\n"
+                                  f"{show.get_rating()}\nDuration:\n{show.get_duration()}\nListed In:\n"
+                                  f"{show.get_genres()}\nDescription:\n{show.get_description()}\n\n"
+                                  f"**************************************************\n\n")
+                        recommend += id_str
             if recommend == "":
                 return "No Results"
             return recommend
