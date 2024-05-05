@@ -202,10 +202,9 @@ class Recommender:
             return "No Results"
         result = [["Title", "Director", "Actor", "Genre"]]
         for value in self.shows.values():
-            if value.get_show() == show_type and (title in value.get_title() or
-                                                  director in value.get_directors() or
-                                                  actor in value.get_actors() or
-                                                  genre in value.get_genres()):
+            if value.get_show() == show_type and title in value.get_title() and \
+               director in value.get_directors() and actor in value.get_actors() and \
+               genre in value.get_genres():
                 result.append([value.get_title(), value.get_directors(), value.get_actors(), value.get_genres()])
         column_widths = [max(len(str(item)) for item in col) for col in zip(*result)]
         formatted_rows = []
