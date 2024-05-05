@@ -70,29 +70,29 @@ class Recommender:
 
     def getMovieList(self):
         movies = [show for show in self.shows.get_show() if show.get_show() == "Movie"]
-        max_title_length = max((len(movie.get_title) for movie in movies), default=20)
+        max_title_length = max((len(movie.get_title()) for movie in movies), default=20)
         header = f"{'Title'.ljust(max_title_length)} {'Runtime'}"
         movie_list = [header]
         for movie in movies:
-            movie_list.append(f"{movie.get_title.ljust(max_title_length)} {movie.get_duration}")
+            movie_list.append(f"{movie.get_title().ljust(max_title_length)} {movie.get_duration()}")
         return "\n".join(movie_list)
 
     def getBookList(self):
         books = [book for book in self.books.get_authors()]
-        max_title_length = max((len(book.get_authors) for book in books), default=20)
+        max_title_length = max((len(book.get_authors()) for book in books), default=20)
         header = f"{'Title'.ljust(max_title_length)} {'Author(s)'}"
         book_list = [header]
         for book in books:
             # Ensure all author names are included, assuming multiple authors can be split by commas
-            authors = ", ".join(book.get_authors.split(','))
-            book_list.append(f"{book.get_authors.ljust(max_title_length)} {authors}")
+            authors = ", ".join(book.get_authors().split(','))
+            book_list.append(f"{book.get_authors().ljust(max_title_length)} {authors}")
         return "\n".join(book_list)
 
     def getTVList(self):
         tv_shows = [show for show in self.shows.get_show() if show.get_show() == "TV Show"]
         # Determine maximum lengths for pretty printing
-        max_title_length = max((len(tv.get_title) for tv in tv_shows), default=20)
-        max_seasons_length = max((len(tv.get_duration.split()[0]) for tv in tv_shows if 'Season' in tv.get_duration), default=7)
+        max_title_length = max((len(tv.get_title()) for tv in tv_shows), default=20)
+        max_seasons_length = max((len(tv.get_duration().split()[0]) for tv in tv_shows if 'Season' in tv.get_duration()), default=7)
 
         # Format the header
         header = f"{'Title'.ljust(max_title_length)} {'Seasons'.ljust(max_seasons_length)}"
@@ -100,7 +100,7 @@ class Recommender:
 
         # Format each TV show entry
         for tv in tv_shows:
-            seasons = tv.get_duration.split()[0]  # Assuming the duration is like "2 Seasons"
+            seasons = tv.get_duration().split()[0]  # Assuming the duration is like "2 Seasons"
             tv_list.append(f"{tv.get_title.ljust(max_title_length)} {seasons.ljust(max_seasons_length)}")
 
         return "\n".join(tv_list)
@@ -110,18 +110,18 @@ class Recommender:
         movies = [show for show in self.shows.get_show() if show.get_show() == "Movie"]
         durations = []
         for movie in movies:
-            duration_parts = movie.get_duration.split()
+            duration_parts = movie.get_duration().split()
             if duration_parts and duration_parts[0].isdigit():
                 durations.append(int(duration_parts[0]))
         average_duration = sum(durations) / len(durations) if durations else 0
-        rating_counts = Counter(movie.get_rating for movie in movies)
+        rating_counts = Counter(movie.get_rating() for movie in movies)
         total_ratings = sum(rating_counts.get_rating())
         rating_distribution = {rating: f"{(count / total_ratings * 100):.2f}%" for rating, count in
                                rating_counts.items()}
         
-        directors = Counter(director for movie in movies for director in movie.get_directors.split(', '))
-        actors = Counter(actor for movie in movies for actor in movie.get_actors.split(', '))
-        genres = Counter(genre for movie in movies for genre in movie.get_genres.split(', '))
+        directors = Counter(director for movie in movies for director in movie.get_directors().split(', '))
+        actors = Counter(actor for movie in movies for actor in movie.get_actors().split(', '))
+        genres = Counter(genre for movie in movies for genre in movie.get_genres().split(', '))
 
         most_common_director = directors.most_common(1)[0][0] if directors else None
         most_common_actor = actors.most_common(1)[0][0] if actors else None
@@ -137,26 +137,26 @@ class Recommender:
         return stats
 
     def getTVStats(self):
-        tv_shows = [show for show in self.shows.get_show() if show.get_show == "TV Show"]
+        tv_shows = [show for show in self.shows.get_show() if show.get_show() == "TV Show"]
 
         # Compute the average number of seasons
         season_counts = []
         for tv in tv_shows:
-            season_number = tv.get_duration.split()[0]
+            season_number = tv.get_duration().split()[0]
             if season_number.isdigit():  # ensure the season number is a digit
                 season_counts.append(int(season_number))
 
         average_seasons = sum(season_counts) / len(season_counts) if season_counts else 0
 
         # Count ratings
-        rating_counts = Counter(tv.get_rating for tv in tv_shows)
+        rating_counts = Counter(tv.get_rating() for tv in tv_shows)
         total_ratings = sum(rating_counts.get_rating())
         rating_distribution = {rating: f"{(count / total_ratings * 100):.2f}%" for rating, count in
                                rating_counts.items()}
 
         # Most frequent actor and genre
-        actors = Counter(actor.strip() for tv in tv_shows for actor in tv.set_actors.split(','))
-        genres = Counter(genre.strip() for tv in tv_shows for genre in tv.get_genres.split(','))
+        actors = Counter(actor.strip() for tv in tv_shows for actor in tv.get_actors().split(','))
+        genres = Counter(genre.strip() for tv in tv_shows for genre in tv.get_genres().split(','))
 
         most_common_actor = actors.most_common(1)[0][0] if actors else 'None'
         most_common_genre = genres.most_common(1)[0][0] if genres else 'None'
@@ -174,15 +174,15 @@ class Recommender:
         books = [book for book in self.books.get_authors()]
 
         # Compute average page count
-        total_pages = sum(int(book.get_pages) for book in books)
+        total_pages = sum(int(book.get_pages()) for book in books)
         average_page_count = round(total_pages / len(books), 2) if books else 0
 
         # Count author book counts
-        authors = Counter(author.strip() for book in books for author in book.get_authors.split(','))
+        authors = Counter(author.strip() for book in books for author in book.get_authors().split(','))
         most_prolific_author = authors.most_common(1)[0][0] if authors else 'None'
 
         # Count publishers
-        publishers = Counter(book.get_publisher for book in books)
+        publishers = Counter(book.get_publisher() for book in books)
         most_books_publisher = publishers.most_common(1)[0][0] if publishers else 'None'
 
         stats = {
