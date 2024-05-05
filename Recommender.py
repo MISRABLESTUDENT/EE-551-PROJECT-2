@@ -189,5 +189,87 @@ class Recommender:
             "Most Prolific Publisher": most_books_publisher
         }
         return stats
+    
+    def searchTVMovies(self, show_type, title, director, actor, genre):
+        if show_type not in ["Movie", "TV Show"]:
+            messagebox.showerror(title="Error", message="Please select 'Movie' or 'TV Show' from Type first.")
+            return "No Results"
+        if title == "" and director == "" and actor == "" and genre == "":
+            messagebox.showerror(title="Error", message="Please enter information for the Title, "
+                                                        "Director, Actor and/or Genre first.")
+            return "No Results"
+        result = [["Title", "Director", "Actor", "Genre"]]
+        for value in self.shows.values():
+            if value.get_show() == show_type and (title in value.get_title() or
+                                                  director in value.get_directors() or
+                                                  actor in value.get_actors() or
+                                                  genre in value.get_genres()):
+                result.append([value.get_title(), value.get_directors(), value.get_actors(), value.get_genres()])
+        column_widths = [max(len(str(item)) for item in col) for col in zip(*result)]
+        formatted_rows = []
+        for row in result:
+            formatted_row = " ".join(str(item).ljust(column_widths[i]) for i, item in enumerate(row))
+            formatted_rows.append(formatted_row)
+        result_str = "\n".join(formatted_rows)
+        return result_str
 
+    def searchBooks(self, title, authors, publisher):
+        if title == "" and authors == "" and publisher == "":
+            messagebox.showerror(title="Error", message="Please enter information for the Title,"
+                                                        " Author, and/or Publisher first")
+            return "No Results"
+        result = [["Title", "Author", "Publisher"]]
+        for value in self.books.values():
+            if title in value.get_title() or authors in value.get_authors() or \
+               publisher in value.get_publisher():
+                result.append([value.get_title(), value.get_authors(), value.get_publisher()])
+        column_widths = [max(len(str(item)) for item in col) for col in zip(*result)]
+        formatted_rows = []
+        for row in result:
+            formatted_row = " ".join(str(item).ljust(column_widths[i]) for i, item in enumerate(row))
+            formatted_rows.append(formatted_row)
+        result_str = "\n".join(formatted_rows)
+        return result_str
 
+    def getRecommendations(self, type1, title):
+        if type1 in ["Movie", "TV Show"]:
+            show_id = None
+            for id1, show in self.shows.items():
+                if title in show.get_title():
+                    show_id = id1
+                    break
+            if not show_id:
+                messagebox.showwarning(title="Warning", message="There are no recommendations for this title.")
+                return "No results"
+            recommend = ""
+            for id2 in self.associations[show_id]:
+                book = self.books[id2]
+                id_str = (f"Title:\n{book.get_title()}\nAuthor:\n{book.get_authors()}\nAverage Rating:\n"
+                          f"{book.get_average_rating()}\nISBN:\n{book.get_isbn()}\nISBN13:\n"
+                          f"{book.get_isbn13()}\nLanguage Code:\n{book.get_language()}\nPages:\n"
+                          f"{book.get_pages()}\nRating Count:\n{book.get_ratings()}\nPublication Date:\n"
+                          f"{book.get_publication_date()}\nPublisher:\n{book.get_publisher()}\n\n"
+                          f"**************************************************\n\n")
+                recommend += id_str
+            return recommend
+        if type1 == "Book":
+            book_id = None
+            for id3, book in self.books.items():
+                if title in book.get_title():
+                    book_id = id3
+                    break
+            if not book_id:
+                messagebox.showwarning(title="Warning", message="There are no recommendations for this title.")
+                return "No Results"
+            recommend = ""
+            for id4 in self.associations[book_id]:
+                show = self.shows[id4]
+                id_str = (f"Type:\n{show.get_show()}\nTitle:\n{show.get_title()}\nDirector:\n"
+                          f"{show.get_directors()}\nCast:\n{show.get_actors()}\nAverage Rating:\n"
+                          f"{show.get_average_rating()}\nCountry:\n{show.get_country()}\nDate Added:\n"
+                          f"{show.get_date()}\nRelease Year:\n{show.get_year()}\nRating:\n"
+                          f"{show.get_rating()}\nDuration:\n{show.get_duration()}\nListed In:\n"
+                          f"{show.get_genres()}\nDescription:\n{show.get_description()}\n\n"
+                          f"**************************************************\n\n")
+                recommend += id_str
+            return recommend
