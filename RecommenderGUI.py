@@ -156,13 +156,13 @@ class RecommenderGUI:
     def update_books_list(self):
         book_list = self.recommender.getBookList()  # 获取电影列表字符串
         print("Book list:", book_list)  # 查看返回的电影列表内容
-        label_books.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
-        label_books.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
-        label_books.smootTextArea.insert(tk.END, book_list)  # 插入新的电影列表
-        label_books.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
+        self.label_books.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
+        self.label_books.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
+        self.label_books.smootTextArea.insert(tk.END, book_list)  # 插入新的电影列表
+        self.label_books.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
     def loadBooks(self):
         self.recommender.loadBooks() 
-        self.update_books_listbox()
+        self.update_books_list()
     #def loadBooks(self):
      #       messagebox.showerror(' ','load books! function not implemented yet')
             
@@ -218,9 +218,9 @@ class RecommenderGUI:
 
         title= self.Title.get()
         publisher= self.Publisher.get()
-        acuthor= self.Author.get()
+        author= self.Author.get()
         #research button
-        self.search_button = ttk.Button(self.searchb_frame, text="Search", command=lambda:self.perform_search_b(title, authors, publisher))
+        self.search_button = ttk.Button(self.searchb_frame, text="Search", command=lambda:self.perform_search_b(title,author, publisher))
         self.search_button.grid(row=5, column=0, columnspan=2, pady=10, sticky='w')
         
         #result shown#
