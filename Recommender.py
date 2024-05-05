@@ -79,15 +79,16 @@ class Recommender:
 
         def getBookList(self):
             books = [book for book in self.books]
-            max_title_length = max((len(book.get_authors()) for book in books), default=20)
-            header = f"{'Title'.ljust(max_title_length)} {'Author(s)'}"
+            max_title_length = max((len(book.get_title()) for book in books), default=20)
+            max_authors_length = max((len(book.get_authors()) for book in books), default=20)
+            header = f"{'Title'.ljust(max_title_length)} {'Author(s)'.ljust(max_authors_length)}"
             book_list = [header]
             for book in books:
-                # Ensure all author names are included, assuming multiple authors can be split by commas
                 authors = ", ".join(book.get_authors().split(','))
-                book_list.append(f"{book.get_authors().ljust(max_title_length)} {authors}")
+                book_list.append(f"{book.get_title().ljust(max_title_length)} {authors.ljust(max_authors_length)}")
             return "\n".join(book_list)
 
+        
         def getTVList(self):
             tv_shows = [show for show in self.shows if show.get_show() == "TV Show"]
             # Determine maximum lengths for pretty printing
