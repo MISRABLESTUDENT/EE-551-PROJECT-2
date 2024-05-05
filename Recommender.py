@@ -43,7 +43,7 @@ class Recommender:
             self.shows[line_list[0]] = show_project
         show_file.close()
 
-        def loadAssociations(self):
+    def loadAssociations(self):
         while True:
             filepath = filedialog.askopenfilename(title="Please select an associations file.", initialdir=os.getcwd())
             if os.path.exists(filepath):
@@ -67,7 +67,7 @@ class Recommender:
                 self.associations[id2][id1] = 1
         association_file.close()
 
-            def getMovieList(self):
+    def getMovieList(self):
         movies = [show for show in self.shows.values() if show.type == "Movie"]
         max_title_length = max((len(movie.title) for movie in movies), default=20)
         header = f"{'Title'.ljust(max_title_length)} {'Runtime'}"
