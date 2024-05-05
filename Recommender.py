@@ -1,3 +1,8 @@
+# Author: Yujia Liu, Tianyu Sheng
+# Date: 5/5/2024
+# Description: In this Python file and the Recommender class,
+# Tianyu Sheng contributed the functions loadBooks(), loadAssociations(), searchTVMovies(), searchBooks(), and getRecommendations().
+# The other functions, including the __init__() function, were contributed by Yujia Liu.
 from Book import Book
 from Show import Show
 from tkinter import filedialog
