@@ -5,6 +5,8 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+from Recommender import Recommender as rc
+
 #import Recommender as rc
 
 class RecommenderGUI:
@@ -14,6 +16,7 @@ class RecommenderGUI:
         self.main_window.geometry("1200x800")    #main window size
         notebook = ttk.Notebook(self.main_window)
         notebook.pack(side='top', fill='both', expand=True)
+        self.recommender = rc()
         
     ## bottom button
         
@@ -23,7 +26,8 @@ class RecommenderGUI:
         self.loadshowsButton = tk.Button(self.buttonFrame, text="Load Shows", command=self.loadShows) #command = rc.loadShows)
         self.loadshowsButton.pack(side='left', padx=70)
         
-        self.loadbooksButton = tk.Button(self.buttonFrame, text="Load Books", command=self.loadBooks) #command = rc.loadBooks)
+        #self.loadbooksButton = tk.Button(self.buttonFrame, text="Load Books", command=rc.loadBooks) #command = rc.loadBooks)
+        self.loadbooksButton = tk.Button(self.buttonFrame, text="Load Books", command=self.loadBooks)
         self.loadbooksButton.pack(side='left', padx=70)
         
         self.loadrecommendationsButton = tk.Button(self.buttonFrame, text="Load Recommendations", command=self.loadAssociations) #command = rc.loadAssocitaions)
@@ -45,17 +49,17 @@ class RecommenderGUI:
         label_movies = ttk.Label(self.movies_frame)
         label_movies.pack(pady=20, padx=20)
 
-        label_movies.smootInfo = ('need getmovielist and getmoviestats')
-        label_movies.smootTextArea = tk.Text(label_movies, wrap=tk.WORD)
-        label_movies.smootTextArea.insert(tk.END, label_movies.smootInfo)
-        label_movies.smootTextArea.config(state=tk.DISABLED)
+        label_movies.smootTextArea = tk.Text(self.movies_frame, wrap=tk.WORD)
         label_movies.smootTextArea.pack(side=tk.TOP)
+        #label_movies.smootInfo = ('need getmovielist and getmoviestats')
+        #label_movies.smootTextArea = tk.Text(label_movies, wrap=tk.WORD)
+        #label_movies.smootTextArea.insert(tk.END, label_movies.smootInfo)
+        #label_movies.smootTextArea.config(state=tk.DISABLED)
+        #label_movies.smootTextArea.pack(side=tk.TOP)
         
-        movie_listbox = tk.Listbox(self.movies_frame, width=50, height=10)
-        movie_listbox.pack(padx=20, pady=20)
-        movies = [("The Shawshank Redemption", 142),("The Godfather", 175),("The Dark Knight", 152),("Pulp Fiction", 154)]
-        for movie, runtime in movies:      #fill listbox
-            movie_listbox.insert(tk.END, f"{movie} - {runtime} minutes")
+        #movie_listbox = tk.Listbox(self.movies_frame, width=50, height=10)
+        #movie_listbox.pack(padx=20, pady=20)
+
 
     ## tvshows tab##
         
@@ -83,11 +87,11 @@ class RecommenderGUI:
         label_books = ttk.Label(self.books_frame)
         label_books.pack(pady=20, padx=20)
 
-        label_books.smootInfo = ('need getbooklist and getbookstats')
-        label_books.smootTextArea = tk.Text(label_books, wrap=tk.WORD)
-        label_books.smootTextArea.insert(tk.END, label_books.smootInfo)
-        label_books.smootTextArea.config(state=tk.DISABLED)
-        label_books.smootTextArea.pack(side=tk.TOP)
+        #label_books.smootInfo = ('need getbooklist and getbookstats')
+        #label_books.smootTextArea = tk.Text(label_books, wrap=tk.WORD)
+        #label_books.smootTextArea.insert(tk.END, label_books.smootInfo)
+        #label_books.smootTextArea.config(state=tk.DISABLED)
+        #label_books.smootTextArea.pack(side=tk.TOP)
         
         books_listbox = tk.Listbox(self.books_frame, width=50, height=10)
         books_listbox.pack(padx=20, pady=20)
@@ -122,14 +126,49 @@ class RecommenderGUI:
         self.getrc()
 
         
+    #def loadShows(self):
+     #   self.recommender.loadShows() 
     def loadShows(self):
-            messagebox.showerror(' ','load shows! function not implemented yet')
-            
+        #try:
+        self.recommender.loadShows()  # 假设这个方法加载电影数据
+        #print("Loaded shows:", self.recommender.shows)
+        self.update_movie_list()  # 更新电影列表显示
+        self.update_tv_list()
+        #except Exception as e:
+         #   messagebox.showerror("Error", f"Failed to load shows: {str(e)}")
+
+            #messagebox.showerror(' ','load shows! function not implemented yet')
+    def update_movie_list(self):
+        movie_list = self.recommender.getMovieList()  # 获取电影列表字符串
+        print("Movie list:", movie_list)  # 查看返回的电影列表内容
+        label_movies.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
+        label_movies.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
+        label_movies.smootTextArea.insert(tk.END, movie_list)  # 插入新的电影列表
+        label_movies.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
+    def update_tv_list(self):
+        tv_list = self.recommender.getTVList()  # 获取电影列表字符串
+        print("TV shows list:", tv_list)  # 查看返回的电影列表内容
+        label_tvshows.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
+        label_tvshows.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
+        label_tvshows.smootTextArea.insert(tk.END, tv_list)  # 插入新的电影列表
+        label_tvshows.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
+        
+    def update_books_list(self):
+        book_list = self.recommender.getBookList()  # 获取电影列表字符串
+        print("Book list:", book_list)  # 查看返回的电影列表内容
+        label_books.smootTextArea.config(state=tk.NORMAL)  # 允许修改内容
+        label_books.smootTextArea.delete('1.0', tk.END)  # 清空现有内容
+        label_books.smootTextArea.insert(tk.END, book_list)  # 插入新的电影列表
+        label_books.smootTextArea.config(state=tk.DISABLED)  # 禁止修改内容
     def loadBooks(self):
-            messagebox.showerror(' ','load books! function not implemented yet')
+        self.recommender.loadBooks() 
+        self.update_books_listbox()
+    #def loadBooks(self):
+     #       messagebox.showerror(' ','load books! function not implemented yet')
             
     def loadAssociations(self):
-            messagebox.showerror(' ','load recommendations! function not implemented yet')
+        self.recommender.loadAssociations() 
+            #messagebox.showerror(' ','load recommendations! function not implemented yet')
             
     def creditInfoBox(self):
         message = 'Group members: Juncheng Zhou, Yujia Liu and Tianyu Sheng\n Completed on : May 7,2024'
@@ -159,8 +198,9 @@ class RecommenderGUI:
         self.actor = self.create_entry("Actor:", 3,self.searchmt_frame)
         self.genre = self.create_entry("Genre:", 4,self.searchmt_frame)
         
+
         #research button
-        self.search_button = ttk.Button(self.searchmt_frame, text="Search", command=self.perform_search)
+        self.search_button = ttk.Button(self.searchmt_frame, text="Search", command=self.perform_search_mt)
         self.search_button.grid(row=5, column=0, columnspan=2, pady=10, sticky='w')
         
         #result shown#
@@ -175,9 +215,11 @@ class RecommenderGUI:
         self.Author = self.create_entry("Author:", 2,self.searchb_frame)
         self.Publisher = self.create_entry("Publisher", 3,self.searchb_frame)
 
-        
+        title= self.Title.get()
+        publisher= self.Publisher.get()
+        acuthor= self.Author.get()
         #research button
-        self.search_button = ttk.Button(self.searchb_frame, text="Search", command=self.perform_search)
+        self.search_button = ttk.Button(self.searchb_frame, text="Search", command=lambda:self.perform_search_b(title, authors, publisher))
         self.search_button.grid(row=5, column=0, columnspan=2, pady=10, sticky='w')
         
         #result shown#
@@ -193,9 +235,20 @@ class RecommenderGUI:
         entry.grid(row=row, column=0, padx=len(label_text*7), pady=5, sticky='w')
         return entry
     
-    def perform_search(self):
-        messagebox.showinfo('Warning','function unfinished')
-    
+    def perform_search_b(self,title, authors, publisher):
+        #messagebox.showinfo('Warning','function unfinished')
+        self.recommender.searchBooks(title, authors, publisher)
+    def perform_search_mt(self):
+        # 获取组合框中的值
+        show_type = self.type_combobox.get()
+        title = self.title.get()
+        director = self.director.get()
+        actor = self.actor.get()
+        genre = self.genre.get()
+
+        print('good luck', show_type, title, director, actor, genre)
+        # 执行搜索（这里假设已经有了相应的recommender对象和方法）
+        self.recommender.searchTVMovies(show_type, title, director, actor, genre)
         
     #get recommendations##
     def getrc(self):
