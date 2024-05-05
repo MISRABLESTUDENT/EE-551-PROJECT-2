@@ -222,7 +222,7 @@ class Recommender:
             return "No Results"
         result = [["Title", "Author", "Publisher"]]
         for value in self.books.values():
-            if title in value.get_title() or authors in value.get_authors() or \
+            if title in value.get_title() and authors in value.get_authors() and \
                publisher in value.get_publisher():
                 result.append([value.get_title(), value.get_authors(), value.get_publisher()])
         column_widths = [max(len(str(item)) for item in col) for col in zip(*result)]
