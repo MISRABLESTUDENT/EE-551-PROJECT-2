@@ -15,8 +15,8 @@ class RecommenderGUI:
         self.main_window = tk.Tk()
         self.main_window.title("Media Recommender")    ##main window title
         self.main_window.geometry("1200x800")    #main window size
-        notebook = ttk.Notebook(self.main_window)
-        notebook.pack(side='top', fill='both', expand=True)
+        self.notebook = ttk.Notebook(self.main_window)
+        self.notebook.pack(side='top', fill='both', expand=True)
         self.recommender = rc()
         
     ## bottom button
@@ -47,8 +47,8 @@ class RecommenderGUI:
         
     ## movies tab##
               
-        self.movies_frame = ttk.Frame(notebook)
-        notebook.add(self.movies_frame,text = 'Movies')
+        self.movies_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.movies_frame,text = 'Movies')
         self.moviewelcome = tk.Label(self.movies_frame, text='Please load show file')
         self.moviewelcome.grid(row=0, column=0, padx=10, pady=10)
 
@@ -56,8 +56,8 @@ class RecommenderGUI:
 
     ## tvshows tab##
 
-        self.tvshows_frame = ttk.Frame(notebook)
-        notebook.add(self.tvshows_frame,text ='TV Shows')
+        self.tvshows_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.tvshows_frame,text ='TV Shows')
         self.tvwelcome = tk.Label(self.tvshows_frame, text='Please load show file')
         self.tvwelcome.grid(row=0, column=0, padx=10, pady=10)
 
@@ -65,8 +65,8 @@ class RecommenderGUI:
         
     ## books tab##
         
-        self.books_frame = ttk.Frame(notebook)
-        notebook.add(self.books_frame,text ='Books')
+        self.books_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.books_frame,text ='Books')
         self.bookwelcome= tk.Label(self.books_frame, text='Please load book file')
         self.bookwelcome.grid(row=0, column=0, padx=10, pady=10)
 
@@ -74,8 +74,8 @@ class RecommenderGUI:
         
     ## search movies/tv tab ##
     
-        self.searchmt_frame = ttk.Frame(notebook)
-        notebook.add(self.searchmt_frame,text ='Search Movies/TV')
+        self.searchmt_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.searchmt_frame,text ='Search Movies/TV')
         
         label_searchmt = ttk.Label(self.searchmt_frame)
         self.searchmt()   #########################
@@ -85,8 +85,8 @@ class RecommenderGUI:
         
         
     ## search books tab ##
-        self.searchb_frame = ttk.Frame(notebook)
-        notebook.add(self.searchb_frame,text ='Search Books')
+        self.searchb_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.searchb_frame,text ='Search Books')
         
         self.label_searchb = ttk.Label(self.searchb_frame)
         self.searchb_result = 'You can search something here'
@@ -96,8 +96,8 @@ class RecommenderGUI:
         
         
     ## recommendations tab ##
-        self.recommendations_frame = ttk.Frame(notebook)
-        notebook.add(self.recommendations_frame,text ='Recommendations')
+        self.recommendations_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.recommendations_frame,text ='Recommendations')
         
         label_recommendations = ttk.Label(self.recommendations_frame)
         self.getrc()
@@ -175,30 +175,34 @@ class RecommenderGUI:
         messagebox.showinfo('Credit Information',message)
 
     def piecharts(self):
-        ratings_tab = ttk.Frame(ttk.Notebook(self.main_window))
+
+        ratings_tab = ttk.Frame(self.notebook)
+        self.notebook.add(ratings_tab, text='Ratings')
+        #self.notebook.pack(fill='both', expand=True)
+
+        # 获取评级数据
         movies_ratings = self.recommender.getMovieStats()[1]
         tv_ratings = self.recommender.getTVStats()[1]
 
-
-        #first piechart
+        # 创建第一个饼状图
         fig1, ax1 = plt.subplots()
         ax1.pie(movies_ratings.values(), labels=movies_ratings.keys(), autopct='%1.2f%%', startangle=90)
         ax1.axis('equal')
+        ax1.set_title("Movie Ratings Distribution")
+        canvas1 = FigureCanvasTkAgg(fig1, master=ratings_tab)
+        canvas1.draw()
+        canvas1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
-        canvas = FigureCanvasTkAgg(fig1,master=ratings_tab)
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
-
-        ## second pie chart
+        # 创建第二个饼状图
         fig2, ax2 = plt.subplots()
         ax2.pie(tv_ratings.values(), labels=tv_ratings.keys(), autopct='%1.2f%%', startangle=90)
         ax2.axis('equal')
+        ax2.set_title("TV Show Ratings Distribution")
+        canvas2 = FigureCanvasTkAgg(fig2, master=ratings_tab)
+        canvas2.draw()
+        canvas2.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
 
-        canvas = FigureCanvasTkAgg(fig2, master=ratings_tab)
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
-
-
+        self.notebook.select(ratings_tab)
 
     ###search tv/movies
     def searchmt(self):
